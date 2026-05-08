@@ -38,9 +38,6 @@ app.use(
     tempFileDir: "/tmp/",
   })
 );
-app.use("/api/v1/message", messageRouter);
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/appointment", appointmentRouter);
 
 app.use(async (req, res, next) => {
   try {
@@ -50,6 +47,10 @@ app.use(async (req, res, next) => {
     next(new ErrorHandler("Database connection failed. Please try again.", 500));
   }
 });
+
+app.use("/api/v1/message", messageRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/appointment", appointmentRouter);
 
 app.use(errorMiddleware);
 export default app;
