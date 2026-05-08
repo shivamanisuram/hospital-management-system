@@ -8,6 +8,7 @@ import { errorMiddleware } from "./middlewares/error.js";
 import messageRouter from "./router/messageRouter.js";
 import userRouter from "./router/userRouter.js";
 import appointmentRouter from "./router/appointmentRouter.js";
+import ErrorHandler from "./middlewares/error.js";
 
 const app = express();
 config({ path: "./config.env" });
@@ -41,7 +42,14 @@ app.use("/api/v1/message", messageRouter);
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/appointment", appointmentRouter);
 
-dbConnection();
+app.use(async (req, res, next) => {
+  try {
+    await dbConnection();
+    next();
+  } catch (error) {
+    next(new ErrorHandler("Database connection failed. Please try again.", 500));
+  }
+});
 
 app.use(errorMiddleware);
 export default app;
