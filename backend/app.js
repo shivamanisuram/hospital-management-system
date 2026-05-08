@@ -44,7 +44,12 @@ app.use(async (req, res, next) => {
     await dbConnection();
     next();
   } catch (error) {
-    next(new ErrorHandler("Database connection failed. Please try again.", 500));
+    next(
+      new ErrorHandler(
+        `Database connection failed: ${error.message}`,
+        500
+      )
+    );
   }
 });
 
